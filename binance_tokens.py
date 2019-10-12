@@ -2,9 +2,6 @@ import requests
 import json
 import cmc_api
 
-def pp(data):
-    return json.dumps(data, indent=3)
-
 def mil(market_cap):
     return f"{(float(market_cap)/10**6):.0f}M"
     

@@ -1,28 +1,5 @@
-# from requests import Request, Session
-# from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-
-
 import sys
-import json
-import requests
-# import argparse
-# import datetime
-# import time
-# import csv
-
-##############################################################################################
-#
-# Library functions for exchanges, tokens, and prices
-#
-# get exchanges
-
-API_BASE_URL = 'https://pro-api.coinmarketcap.com/v1'
-API_KEY = '1bcd5ce4-80f1-4b19-8247-f3856f577cfb'
-CRYPTOCURRENCY_ENDPOINT = API_BASE_URL + '/cryptocurrency'
-EXCHANGE_ENDPOINT = API_BASE_URL + '/exchange'
-
-def pp(data):
-    return json.dumps(data, indent=3)
+import cmc_api
 
 def best_tokens(tokens, window="24h", min_volume=10000000):
     pct_attr = f"percent_change_{window}"
@@ -39,34 +16,10 @@ def best_tokens(tokens, window="24h", min_volume=10000000):
     return sorted(pct_change_by_token.items(),  key=lambda x: -x[1])
     
 
-def fetch_data(fetch_from_network=False):
-    json_filename = 'tokens.json'
-    
-    if fetch_from_network:
-        try:
-            # https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?sort=market_cap&start=1&limit=10&cryptocurrency_type=tokens&convert=USD,BTC
-            r = requests.get(CRYPTOCURRENCY_ENDPOINT + '/listings/latest',
-                             params={'sort':'market_cap', 'start':'1', 'limit':'5000',
-                                     'cryptocurrency_type':'tokens', 'convert':'USD'},
-                             headers={'Accept': 'application/json', 'X-CMC_PRO_API_KEY': API_KEY})
-            j = r.json()
-            print(f"json: \n{pp(j)}")
-            with open(json_filename, 'w') as f:
-                json.dump(j, f)
-        except Exception as e:
-            r = e.args[0]
-            print(f"exception: {e}")
-
-    else:
-        with open(json_filename) as f:
-            j = json.load(f)
-
-    return j
 
 ######################################################################################
-# j = fetch_data(fetch_from_network=True)
-j = fetch_data()
-tokens = j['data']
+# tokens = fetch_data(fetch_from_network=True)
+tokens = cmc_api.fetch_data()
 
 min_24h_volume = 5000000
 

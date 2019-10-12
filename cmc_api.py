@@ -23,6 +23,7 @@ def fetch_data(fetch_from_network=False):
                          params={'sort':'market_cap', 'start':'1', 'limit':'5000',
                                  'cryptocurrency_type':'tokens', 'convert':'USD'},
                          headers={'Accept': 'application/json', 'X-CMC_PRO_API_KEY': API_KEY})
+        print(f"fetching data from {r.url.split('?')[0]} ...")
         j = r.json()
         d = datetime.datetime.today()
         json_filename = f"json/{d.year}-{d.month:02d}-{d.day:02d}_{d.hour:02d}:{d.minute:02d}:{d.second:02d}-tokens.json"
