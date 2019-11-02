@@ -20,7 +20,7 @@ def print_stats(tokens, split_usdt_market_cap=True):
     # token_cap = { t['symbol']:float(t['quote']['USD']['market_cap'] or 0) for t in tokens }
     platform_cap, platform_n = {}, {}
     for t in tokens:
-        platform = t['platform']
+        platform = t.get('platform')
         if platform is None:
             print(f"{t['symbol']} has no platform")
             continue
@@ -52,7 +52,7 @@ def print_stats(tokens, split_usdt_market_cap=True):
 
 ######################################################################################
 
-if sys.argv[0]: # whatever they type means "use cached file"
+if len(sys.argv) > 1: # whatever they type means "use cached file"
     tokens = cmc_api.fetch_data()
 else:
     tokens = cmc_api.fetch_data(fetch_from_network=True)
